@@ -1,0 +1,26 @@
+{
+  "name": "solrights",
+  "version": "1.0.0",
+  "description": "Sell Your Content",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rishabhknowss/solrights.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rishabhknowss/solrights/issues"
+  },
+  "homepage": "https://github.com/rishabhknowss/solrights#readme",
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "typescript": "^5.6.2"
+  }
+}

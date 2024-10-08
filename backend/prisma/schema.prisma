@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  address  String   @unique
+  role     Role
+  assets   Asset[]  @relation("OwnerAssets")
+  purchases Subscription[]
+}
+
+enum Role {
+  Creator
+  Buyer
+}
+
+model Asset {
+  id          Int            @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  type        Type
+  arweaveUrl  String
+  ownerId     Int
+  owner       User           @relation("OwnerAssets", fields: [ownerId], references: [id])
+  subscriptions Subscription[]
+}
+
+enum Type {
+  Image
+  Video
+  Audio
+}
+
+model Subscription {
+  id        Int   @id @default(autoincrement())
+  userId    Int
+  user      User  @relation(fields: [userId], references: [id])
+  assetId   Int
+  asset     Asset @relation(fields: [assetId], references: [id]) 
+  validUntil DateTime
+}
+
