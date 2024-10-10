@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,44 +8,46 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String   @unique
-  address  String   @unique
-  role     Role
-  assets   Asset[]  @relation("OwnerAssets")
-  purchases Subscription[]
+  id          Int         @id @default(autoincrement())
+  wallet      String      @unique
+  name        String?
+  userType    UserType?   @default(buyer)
+  assets      Asset[]
+  subscriptions Subscription[]  
+  access      Access[]
 }
 
-enum Role {
-  Creator
-  Buyer
+enum UserType {
+  creator
+  buyer
 }
 
 model Asset {
-  id          Int            @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   name        String
-  description String
-  price       Float
-  type        Type
-  arweaveUrl  String
+  description String?     
+  url         String      // Arweave 
+  price       Int       
   ownerId     Int
-  owner       User           @relation("OwnerAssets", fields: [ownerId], references: [id])
-  subscriptions Subscription[]
+  owner       User        @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime    @default(now()) 
+  accesses    Access[]    
 }
 
-enum Type {
-  Image
-  Video
-  Audio
+model Access {
+  id          Int         @id @default(autoincrement())
+  assetId     Int
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  asset       Asset       @relation(fields: [assetId], references: [id])
+  expiresAt   DateTime    
+  createdAt   DateTime    @default(now())
 }
 
 model Subscription {
-  id        Int   @id @default(autoincrement())
-  userId    Int
-  user      User  @relation(fields: [userId], references: [id])
-  assetId   Int
-  asset     Asset @relation(fields: [assetId], references: [id]) 
-  validUntil DateTime
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  user        User        @relation(fields: [userId], references: [id])
+  expiresAt   DateTime    
+  createdAt   DateTime    @default(now())
 }
-
